@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+        <link rel="stylesheet" href="style/index.css">
+        <link rel="stylesheet" href="http://leaverou.github.io/awesomplete/awesomplete.css">
+        <title>Desafio</title>
+    </head>
+    <body>
+        <main class="columns is-centered is-multiline">
+            <header class="column is-12">
+                <div class="columns is-centered">
+                    <div class="column is-2 logo">Finder Chagenlle</div>
+                    <div class="column is-2 conten-search">
+                        <div class="field has-addons">
+                            <div class="control">
+                                <input id="textSearch" class="input awesomplete" type="text" list="theList" data-autofirst="true" data-maxitems="7" autocomplete="off" placeholder="Find a repository">
+                                <datalist id="theList">
+                                    <option>...</option>
+                                </datalist>
+                            </div>
+                            <div class="control">
+                                <a id="buttonSearch" class="button is-info" disabled="true">
+                                Buscar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-6 save-search"><a href="#">Guardar Busqueda</a></div>
+                </div>
+            </header>
+            <aside class="column is-3 item-zone"></aside>
+            <main id="resultZone" class="column is-8 result-zone">
+                <div id="loadFind" class="columns is-multiline is-center"></div>
+            </main>
+        </main>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="js/books-shema.js"></script>
+        <script>
+            $(document).ready(() => {
+
+                objeto.data.map((array) => {
+                    $('<option>'+ array.title +'</option>').appendTo('#theList')
+                })
+
+                var input = document.getElementById("textSearch");
+                new Awesomplete(input, {list: "#theList"});
+
+                $('#textSearch').on('keyup',(event) => {
+                    if(event.target.value.length >= 2) {
+                        $('#buttonSearch').removeAttr('disabled')
+                    } else {
+                        $('#buttonSearch').attr('disabled', true)
+                    }
+                })
+                $('#textSearch').on('keypress',(event) => {
+                    console.log(event.charCode === 13);
+                    
+                    if(event.charCode === 13 && $('#textSearch').val().length >= 2) {
+                        findBooks( $('#textSearch').val() )
+                    }
+                })
+                $('#buttonSearch').on('click', (event) => {
+                    if($(event.target).attr('disabled') === undefined) {
+                        findBooks( $('#textSearch').val() )
+                    }
+                })
+                function findBooks(text) {
+                    var result = objeto.data.filter(function (element) {
+                        return element.title.toUpperCase().includes(text.toUpperCase())
+                    })
+                    return result.slice(0,8).map((element) => {
+                        $(`
+                        <div class="column is-4">
+                            <div class="card">
+                                <div class="card-image">
+                                    <figure class="image is-4by3">
+                                        <img src="${element.image}" alt="Placeholder image">
+                                    </figure>
+                                </div>
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-content">
+                                            <p class="title is-4">${element.title}</p>
+                                        </div>
+                                    </div>
+                                    <div class="content">
+                                        ${element.teaser}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        `).appendTo('#loadFind')
+                    })
+                }
+            })
+        </script>
+        <script src="http://leaverou.github.io/awesomplete/awesomplete.js"></script>
+    </body>
+</html>

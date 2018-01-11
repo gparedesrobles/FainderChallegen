@@ -1,0 +1,21 @@
+body {
+    margin: 5px;
+}
+.logo {
+    font-size: 32px;
+    font-weight: bold;
+}
+.conten-search {
+    padding-top: 20px;
+}
+.save-search {
+    padding-top: 25px;
+}
+.item-zone {
+    min-height: 400px;
+    background-color: blue;
+}
+.result-zone {
+    min-height: 400px;
+    background-color: transparent;
+}
